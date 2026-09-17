@@ -1,6 +1,5 @@
 # ODC SEET Variance Dashboard (myMVP)
 
-**Developer:** Wilson Serquina
 **Build:** v1.5.1
 **Project:** `seet-variances` (Firebase)
 **Hosted URL:** https://seet-variances.web.app
@@ -107,7 +106,7 @@ Start-Process ".\index.html"
 
 ### Step 1 — Get your credentials
 
-Ask your administrator (Wilson Serquina) for:
+Ask your administrator for:
 - Your **IBM email address** (e.g. `firstname.lastname@ibm.com`)
 - Your **temporary password**
 
