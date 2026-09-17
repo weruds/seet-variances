@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ODC SEET Variance Dashboard — User Guide</title>
+<style>
+  /* ── Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.65;
+    color: #1a202c;
+    background: #fff;
+    padding: 0;
+  }
+
+  /* ── Print layout ── */
+  @media print {
+    body { font-size: 11px; }
+    .no-print { display: none !important; }
+    .page-break { page-break-before: always; }
+    h1.doc-title { page-break-after: avoid; }
+    h2 { page-break-after: avoid; }
+    table { page-break-inside: avoid; }
+    .cover { page-break-after: always; }
+  }
+
+  /* ── Screen wrapper ── */
+  .wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 48px 60px;
+  }
+
+  /* ── Cover page ── */
+  .cover {
+    border-bottom: 3px solid #2563eb;
+    padding-bottom: 36px;
+    margin-bottom: 48px;
+  }
+  .cover-badge {
+    display: inline-block;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 18px;
+  }
+  .cover h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1e3a8a;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  .cover .sub {
+    font-size: 15px;
+    color: #475569;
+    margin-bottom: 24px;
+  }
+  .cover-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .cover-meta-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .cover-meta-item .label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+  }
+  .cover-meta-item .value {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e40af;
+  }
+  .cover-url {
+    margin-top: 20px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #1d4ed8;
+    font-weight: 600;
+  }
+  .cover-url span { color: #64748b; font-weight: 400; font-size: 11px; display: block; margin-bottom: 2px; }
+
+  /* ── Table of contents ── */
+  .toc {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 40px;
+  }
+  .toc-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #64748b;
+    margin-bottom: 12px;
+  }
+  .toc ol {
+    padding-left: 18px;
+    color: #1e40af;
+    font-size: 12px;
+  }
+  .toc li { margin-bottom: 4px; }
+
+  /* ── Headings ── */
+  h2 {
+    font-size: 17px;
+    font-weight: 800;
+    color: #1e3a8a;
+    margin-top: 40px;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #dbeafe;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h2 .sec-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px; height: 26px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e40af;
+    margin-top: 22px;
+    margin-bottom: 8px;
+  }
+  h4 {
+    font-size: 12px;
+    font-weight: 700;
+    color: #374151;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  p { margin-bottom: 10px; }
+
+  /* ── Tables ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 18px;
+    font-size: 12px;
+  }
+  th {
+    background: #1e40af;
+    color: #fff;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  td { padding: 7px 12px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  td strong { color: #1e40af; }
+
+  /* ── Steps ── */
+  .steps { counter-reset: step; list-style: none; padding: 0; margin: 8px 0 16px; }
+  .steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .steps li::before {
+    content: counter(step);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    min-width: 22px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 50%;
+    margin-top: 1px;
+  }
+
+  /* ── Info / Note boxes ── */
+  .note {
+    background: #eff6ff;
+    border-left: 3px solid #2563eb;
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 12px;
+    margin: 10px 0 16px;
+    color: #1e40af;
+  }
+  .warn {
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 12px;
+    margin: 10px 0 16px;
+    color: #92400e;
+  }
+
+  /* ── Code / URL blocks ── */
+  code {
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 11.5px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: #1e40af;
+  }
+  pre {
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 11.5px;
+    background: #0f172a;
+    color: #93c5fd;
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 8px 0 16px;
+    line-height: 1.6;
+  }
+
+  /* ── Role badges ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .badge-blue   { background: #dbeafe; color: #1d4ed8; }
+  .badge-green  { background: #dcfce7; color: #166534; }
+  .badge-orange { background: #ffedd5; color: #9a3412; }
+  .badge-gray   { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+
+  /* ── Section divider ── */
+  .divider { border: none; border-top: 1px solid #e2e8f0; margin: 32px 0; }
+
+  /* ── Footer ── */
+  .doc-footer {
+    margin-top: 60px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+    font-size: 11px;
+    color: #94a3b8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* ── Print button ── */
+  .print-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 28px;
+  }
+  .print-btn:hover { background: #1d4ed8; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- Print button (screen only) -->
+  <div class="no-print" style="text-align:right;margin-bottom:8px;">
+    <button class="print-btn" onclick="window.print()">🖨 Save / Print as PDF</button>
+  </div>
+
+  <!-- ══════════ COVER ══════════ -->
+  <div class="cover">
+    <div class="cover-badge">User Guide &amp; Installation Reference</div>
+    <h1>ODC SEET Variance Dashboard</h1>
+    <div class="sub">Monitor · Validate · Pinpoint — myMVP</div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="label">Developer</div>
+        <div class="value">Wilson Serquina</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Build Version</div>
+        <div class="value">v1.5.1</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Firebase Project</div>
+        <div class="value">seet-variances</div>
+      </div>
+    </div>
+    <div class="cover-url">
+      <span>Hosted URL</span>
+      https://seet-variances.web.app
+    </div>
+  </div>
+
+  <!-- ══════════ TABLE OF CONTENTS ══════════ -->
+  <div class="toc">
+    <div class="toc-title">Table of Contents</div>
+    <ol>
+      <li>What This Dashboard Does</li>
+      <li>Technology Stack</li>
+      <li>User Roles</li>
+      <li>Accessing the Dashboard</li>
+      <li>First-Time Sign-In Guide</li>
+      <li>Navigation Guide — Step by Step</li>
+      <li>Sidebar Quick Reference</li>
+      <li>File Upload Format Requirements</li>
+      <li>Activity Code Legend</li>
+      <li>Deploying Updates</li>
+      <li>Troubleshooting</li>
+      <li>Security Notes</li>
+    </ol>
+  </div>
+
+  <!-- ══════════ SECTION 1 ══════════ -->
+  <h2><span class="sec-num">1</span> What This Dashboard Does</h2>
+  <p>
+    The ODC SEET Variance Dashboard (myMVP) is a browser-based tool for <strong>monitoring, validating, and pinpointing attendance variances</strong> within the ODC SEET team. It compares two attendance data sources — <strong>Monday.com</strong> records and <strong>ILC (IBM Labour Centre)</strong> clockings — against employee WFH schedules, surfaces discrepancies, and allows employees to submit explanations for review by auditors.
+  </p>
+
+  <table>
+    <thead><tr><th>Page / Area</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><strong>My Variances</strong></td><td>Each signed-in employee sees their own private variance report</td></tr>
+      <tr><td><strong>Variance Review</strong></td><td>Auditors review and resolve submitted variance explanations</td></tr>
+      <tr><td><strong>Monthly Attendance (ILC)</strong></td><td>Upload and browse ILC timesheet exports by month</td></tr>
+      <tr><td><strong>Monthly Attendance (Monday.com)</strong></td><td>Upload and browse Monday.com attendance exports by month</td></tr>
+      <tr><td><strong>Monday vs WFH Schedule</strong></td><td>Detect WFH compliance variances against employee schedules</td></tr>
+      <tr><td><strong>Monday vs ILC</strong></td><td>Detect discrepancies between Monday.com and ILC clockings</td></tr>
+      <tr><td><strong>Discrepancy List</strong></td><td>Consolidated view of all detected discrepancies</td></tr>
+      <tr><td><strong>Masterlist</strong></td><td>Employee registry, auto-populated from ILC uploads</td></tr>
+      <tr><td><strong>WFH Schedule</strong></td><td>Manage WFH days per employee</td></tr>
+      <tr><td><strong>Onboard New Employee</strong></td><td>Add new team members to the masterlist manually</td></tr>
+      <tr><td><strong>Service Lines</strong></td><td>Manage service line codes and descriptions</td></tr>
+      <tr><td><strong>Role Maintenance</strong></td><td>Assign Admin or Auditor roles to employees</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════ SECTION 2 ══════════ -->
+  <h2><span class="sec-num">2</span> Technology Stack</h2>
+  <table>
+    <thead><tr><th>Layer</th><th>Technology</th></tr></thead>
+    <tbody>
+      <tr><td>UI</td><td>HTML5, CSS3, Vanilla JavaScript — no build step required</td></tr>
+      <tr><td>Authentication</td><td>Firebase Auth (email + password)</td></tr>
+      <tr><td>Database</td><td>Cloud Firestore (Google)</td></tr>
+      <tr><td>Hosting</td><td>Firebase Hosting</td></tr>
+      <tr><td>File parsing</td><td>SheetJS — supports CSV and XLSX uploads</td></tr>
+      <tr><td>Fonts</td><td>Google Fonts — Space Grotesk, Inter</td></tr>
+    </tbody>
+  </table>
+  <div class="note">The entire dashboard is a single <code>index.html</code> file. There is no Node.js server, no frontend build tool, and no npm install needed to run it.</div>
+
+  <!-- ══════════ SECTION 3 ══════════ -->
+  <h2><span class="sec-num">3</span> User Roles</h2>
+  <table>
+    <thead><tr><th>Role</th><th>What they can access</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-gray">Employee</span></td>
+        <td>My Variances page only — their own private variance report</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-blue">Auditor</span></td>
+        <td>My Variances, Variance Review, Discrepancy List, Detect Variances (view + notify), Masterlist, WFH Schedule, Monthly Attendance (ILC &amp; Monday.com)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-orange">Admin</span></td>
+        <td>Everything — all Auditor access plus Onboard Employee, Service Lines, Role Maintenance, Master Sync, Import Variances</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="note">Role changes are made in <strong>Role Maintenance</strong> by an Admin. The new role takes effect on the user's next sign-in.</div>
+
+  <!-- ══════════ SECTION 4 ══════════ -->
+  <h2><span class="sec-num">4</span> Accessing the Dashboard</h2>
+
+  <h3>Option A — Use the hosted site (recommended)</h3>
+  <p>Open any modern browser (Chrome, Edge, Firefox) and navigate to:</p>
+  <div class="note" style="font-size:14px;font-weight:700;">https://seet-variances.web.app</div>
+  <p>No installation is needed. Sign in with the IBM email and temporary password provided by your administrator.</p>
+
+  <h3>Option B — Open the file locally</h3>
+  <p>If you have the project folder on your computer, open <code>index.html</code> directly:</p>
+  <pre>Start-Process ".\index.html"</pre>
+  <div class="warn">Local file access may limit Firebase Auth and Firestore functionality due to browser security restrictions. Use the hosted URL whenever possible.</div>
+
+  <!-- ══════════ SECTION 5 ══════════ -->
+  <h2><span class="sec-num">5</span> First-Time Sign-In Guide</h2>
+
+  <h3>What you need before you start</h3>
+  <ul style="padding-left:18px;margin-bottom:12px;">
+    <li>Your <strong>IBM email address</strong> (e.g. <code>firstname.lastname@ibm.com</code>)</li>
+    <li>A <strong>temporary password</strong> provided by the administrator (Wilson Serquina)</li>
+    <li>A modern browser — Chrome, Edge, or Firefox</li>
+    <li>Internet access</li>
+  </ul>
+
+  <h3>Steps</h3>
+  <ol class="steps">
+    <li><strong>Open the dashboard.</strong> Go to <code>https://seet-variances.web.app</code> in your browser.</li>
+    <li><strong>Click "Sign in"</strong> at the bottom-left of the sidebar.</li>
+    <li><strong>Enter your credentials.</strong> Type your IBM email address and temporary password, then click <strong>Sign In</strong>.</li>
+    <li><strong>Set a new password (first login only).</strong> The dashboard will prompt you to change your temporary password. Enter a new password (minimum 8 characters), confirm it, and click <strong>Update Password</strong>.</li>
+    <li><strong>You are now signed in.</strong> The sidebar updates to show the pages available for your role.</li>
+  </ol>
+
+  <div class="note">After the first login your credentials are saved by Firebase Auth. You will only need to enter them again if you sign out or clear your browser data.</div>
+
+  <!-- ══════════ SECTION 6 ══════════ -->
+  <div class="page-break"></div>
+  <h2><span class="sec-num">6</span> Navigation Guide — Step by Step</h2>
+
+  <h3>Landing page</h3>
+  <p>Every user lands on <strong>My Variances</strong> when they open the dashboard. The left sidebar shows only the sections permitted by your role. The sidebar also displays the current date, quarter, and the Firebase connection status dot at the bottom.</p>
+
+  <hr class="divider" />
+
+  <h3>For Employees — View your variances</h3>
+  <ol class="steps">
+    <li>The default page is <strong>My Variances</strong>. If you are signed in, your report loads automatically.</li>
+    <li>If the page shows "Sign in to view your private variance report", click <strong>Sign in</strong> in the sidebar and follow Section 5.</li>
+    <li>Use the <strong>Refresh</strong> button to reload the latest data at any time.</li>
+  </ol>
+
+  <hr class="divider" />
+
+  <h3>For Admins — Full workflow</h3>
+
+  <h4>A. Set up the employee masterlist</h4>
+  <ol class="steps">
+    <li>Go to <strong>Admin → Monthly Attendance (ILC)</strong> and upload an ILC export. The masterlist is auto-populated from ILC uploads.</li>
+    <li>Alternatively, go to <strong>Admin → Onboard New Employee</strong> and click <strong>＋ Onboard Employee</strong> to add employees manually.</li>
+  </ol>
+
+  <h4>B. Configure WFH schedules</h4>
+  <ol class="steps">
+    <li>Go to <strong>Admin → WFH Schedule</strong>.</li>
+    <li>Click <strong>📤 Upload WFH Schedule</strong> and select a CSV or XLSX file.</li>
+    <li>Use the search box to find a specific employee and edit their WFH days as needed.</li>
+  </ol>
+
+  <h4>C. Upload attendance data</h4>
+  <ol class="steps">
+    <li>Go to <strong>Attendance → Monthly Attendance (ILC)</strong>.</li>
+    <li>Click <strong>📤 Upload Monthly Attendance (ILC)</strong> and select the ILC export file.</li>
+    <li>Review the column mapping preview, then click <strong>Upload</strong> to confirm.</li>
+    <li>Repeat for <strong>Attendance → Monthly Attendance (Monday.com)</strong> using the Monday.com export file.</li>
+  </ol>
+
+  <h4>D. Detect variances</h4>
+  <p><strong>Monday vs WFH Schedule:</strong></p>
+  <ol class="steps">
+    <li>Go to <strong>Discrepancy List → Detect Variances → Monday vs WFH Schedule</strong>.</li>
+    <li>Select the <strong>Year</strong> and <strong>Month</strong> from the toolbar filters.</li>
+    <li>Click <strong>🔍 Detect Variances</strong>.</li>
+    <li>Review the results. Each row shows the employee, their WFH days, the flagged date, Monday status, and the variance type.</li>
+    <li>Tag individual rows or use <strong>TAG ALL</strong> to select records for notification.</li>
+    <li>Click <strong>📧 Notify Employees</strong> to send notifications to selected employees.</li>
+  </ol>
+
+  <p><strong>Monday vs ILC:</strong></p>
+  <ol class="steps">
+    <li>Go to <strong>Discrepancy List → Detect Variances → Monday vs ILC</strong>.</li>
+    <li>Select <strong>Year</strong> and <strong>Month</strong>.</li>
+    <li>Click <strong>🔍 Detect Variances</strong>.</li>
+    <li>Review discrepancies between ILC clockings and Monday.com records. Tag and notify as needed.</li>
+  </ol>
+
+  <h4>E. Review the discrepancy list</h4>
+  <ol class="steps">
+    <li>Navigate to <strong>Discrepancy List</strong> in the sidebar (under the Discrepancy List section).</li>
+    <li>Filter by Year, Month, Name, or IBM Serial No.</li>
+    <li>Use the Search box to find a specific employee.</li>
+  </ol>
+
+  <h4>F. Review variance submissions</h4>
+  <ol class="steps">
+    <li>Go to <strong>Variance Review</strong> (visible after sign-in for Auditors and Admins).</li>
+    <li>Open each pending submission to read the employee's explanation.</li>
+    <li>Approve or reject the submission.</li>
+  </ol>
+
+  <h4>G. Manage roles</h4>
+  <ol class="steps">
+    <li>Go to <strong>Admin → Role Maintenance</strong>.</li>
+    <li>Click <strong>＋ Add User</strong>.</li>
+    <li>Select the employee, assign the role (Admin or Auditor), and click <strong>Save</strong>.</li>
+    <li>The new role takes effect on the employee's next sign-in.</li>
+  </ol>
+
+  <!-- ══════════ SECTION 7 ══════════ -->
+  <div class="page-break"></div>
+  <h2><span class="sec-num">7</span> Sidebar Quick Reference</h2>
+  <table>
+    <thead><tr><th>Section</th><th>Item</th><th>Who sees it</th></tr></thead>
+    <tbody>
+      <tr><td>Variances</td><td>View my Variances</td><td>Everyone</td></tr>
+      <tr><td>Variances</td><td>Variance Review</td><td>Admin, Auditor</td></tr>
+      <tr><td>Admin</td><td>Onboard New Employee</td><td>Admin</td></tr>
+      <tr><td>Admin</td><td>Service Lines</td><td>Admin</td></tr>
+      <tr><td>Admin</td><td>Masterlist</td><td>Admin</td></tr>
+      <tr><td>Admin</td><td>WFH Schedule</td><td>Admin</td></tr>
+      <tr><td>Admin</td><td>Role Maintenance</td><td>Admin</td></tr>
+      <tr><td>Discrepancy List</td><td>Detect Variances → Monday vs WFH Schedule</td><td>Admin, Auditor</td></tr>
+      <tr><td>Discrepancy List</td><td>Detect Variances → Monday vs ILC</td><td>Admin, Auditor</td></tr>
+      <tr><td>Attendance</td><td>Monthly Attendance (ILC)</td><td>Admin, Auditor</td></tr>
+      <tr><td>Attendance</td><td>Monthly Attendance (Monday.com)</td><td>Admin, Auditor</td></tr>
+      <tr><td>Records</td><td>Masterlist</td><td>Auditor</td></tr>
+      <tr><td>Records</td><td>WFH Schedule</td><td>Auditor</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════ SECTION 8 ══════════ -->
+  <h2><span class="sec-num">8</span> File Upload Format Requirements</h2>
+  <div class="note">All uploads accept <strong>.csv</strong> and <strong>.xlsx</strong> formats. Column headers are matched case-insensitively. A preview modal is shown before any data is saved.</div>
+
+  <h3>ILC Attendance</h3>
+  <table>
+    <thead><tr><th>Column</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>IBM Serial No.</td><td>Employee IBM serial number</td></tr>
+      <tr><td>Name</td><td>Employee full name</td></tr>
+      <tr><td>Email</td><td>IBM email address</td></tr>
+      <tr><td>Weekending</td><td>Week-ending date (Saturday of that work week)</td></tr>
+      <tr><td>Activity</td><td>Activity code: GB, VL, SL, HOL, OHOL, CDO, PRNT, PTNW, UTNW, EMPL</td></tr>
+      <tr><td>Mon / Tue / Wed / Thu / Fri</td><td>Hours worked each weekday</td></tr>
+      <tr><td>Sat / Sun</td><td>Weekend hours (if any)</td></tr>
+      <tr><td>Total Hrs</td><td>Weekly total hours</td></tr>
+      <tr><td>OT Hrs</td><td>Overtime hours</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Monday.com Attendance</h3>
+  <table>
+    <thead><tr><th>Column</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>IBM Serial No.</td><td>Employee IBM serial number</td></tr>
+      <tr><td>Name</td><td>Employee full name</td></tr>
+      <tr><td>Email</td><td>IBM email address</td></tr>
+      <tr><td>Date</td><td>Attendance date</td></tr>
+      <tr><td>Group</td><td>Monday.com group / service line</td></tr>
+      <tr><td>Status</td><td>Attendance status (e.g. WFH, Onsite, Leave)</td></tr>
+      <tr><td>Duration</td><td>Hours worked</td></tr>
+    </tbody>
+  </table>
+
+  <h3>WFH Schedule</h3>
+  <table>
+    <thead><tr><th>Column</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>IBM Serial No.</td><td>Employee IBM serial number</td></tr>
+      <tr><td>Name</td><td>Employee full name</td></tr>
+      <tr><td>Email</td><td>IBM email address</td></tr>
+      <tr><td>Days Selection</td><td>WFH days (e.g. Monday, Wednesday)</td></tr>
+      <tr><td>WFH Status</td><td>Active or Inactive</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════ SECTION 9 ══════════ -->
+  <h2><span class="sec-num">9</span> Activity Code Legend</h2>
+  <table>
+    <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><strong>GB</strong></td><td>General Billable</td></tr>
+      <tr><td><strong>VL</strong></td><td>Vacation Leave</td></tr>
+      <tr><td><strong>SL</strong></td><td>Sick Leave</td></tr>
+      <tr><td><strong>HOL</strong></td><td>Designated Holiday</td></tr>
+      <tr><td><strong>OHOL</strong></td><td>Optional Holiday</td></tr>
+      <tr><td><strong>CDO</strong></td><td>Compensatory Day Off</td></tr>
+      <tr><td><strong>PRNT</strong></td><td>Parenting Leave</td></tr>
+      <tr><td><strong>PTNW</strong></td><td>Paid Time Not Worked</td></tr>
+      <tr><td><strong>UTNW</strong></td><td>Unpaid Time Not Worked</td></tr>
+      <tr><td><strong>EMPL</strong></td><td>Pre/Post IBM Employment</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════ SECTION 10 ══════════ -->
+  <div class="page-break"></div>
+  <h2><span class="sec-num">10</span> Deploying Updates</h2>
+  <p>This section is for developers or admins who need to push code changes to the hosted site.</p>
+
+  <h3>Requirements</h3>
+  <ul style="padding-left:18px;margin-bottom:12px;">
+    <li>Node.js 20 or newer (only needed for the Firebase CLI)</li>
+    <li>Firebase CLI installed and authenticated</li>
+    <li>Access to the <code>seet-variances</code> Firebase project</li>
+  </ul>
+
+  <h3>Install Firebase CLI (one-time)</h3>
+  <pre>npm install -g firebase-tools
+firebase --version</pre>
+
+  <h3>Deploy to production</h3>
+  <p>From the project root folder:</p>
+  <pre>firebase login
+firebase use seet-variances
+firebase deploy --only hosting,firestore</pre>
+  <div class="note">The hosted site at <strong>https://seet-variances.web.app</strong> is updated immediately after deploy completes.</div>
+
+  <h3>Automated deployment (GitHub Actions)</h3>
+  <p>Pushing to the <code>main</code> branch triggers the workflow in <code>.github/workflows/</code>. This deploys automatically provided the Firebase service-account secret is configured in the repository settings.</p>
+
+  <!-- ══════════ SECTION 11 ══════════ -->
+  <h2><span class="sec-num">11</span> Troubleshooting</h2>
+
+  <h3>Cannot sign in</h3>
+  <ul style="padding-left:18px;margin-bottom:10px;">
+    <li>Confirm your email and password are exactly as provided — passwords are case-sensitive.</li>
+    <li>If you forgot your password, ask the administrator to reset it in Firebase Console.</li>
+  </ul>
+
+  <h3>"Connecting…" never changes in the sidebar</h3>
+  <ul style="padding-left:18px;margin-bottom:10px;">
+    <li>Check your internet connection.</li>
+    <li>Verify you are loading from <code>https://seet-variances.web.app</code> or a local HTTP server.</li>
+    <li>Open browser DevTools (F12) → Console for Firebase error messages.</li>
+  </ul>
+
+  <h3>I can sign in but see no data</h3>
+  <ul style="padding-left:18px;margin-bottom:10px;">
+    <li>Confirm your role has been assigned by an admin in Role Maintenance.</li>
+    <li>Sign out and sign back in — role changes take effect on the next sign-in.</li>
+  </ul>
+
+  <h3>Upload fails or shows no rows</h3>
+  <ul style="padding-left:18px;margin-bottom:10px;">
+    <li>Check that the file format is CSV or XLSX.</li>
+    <li>Confirm column headers match the expected names (see Section 8).</li>
+    <li>Large files (&gt; 5,000 rows) may take several seconds to parse.</li>
+  </ul>
+
+  <h3>"Detect Variances" finds nothing</h3>
+  <ul style="padding-left:18px;margin-bottom:10px;">
+    <li>Confirm both attendance sources (ILC and Monday.com) have been uploaded for the selected month.</li>
+    <li>Check the Year and Month filters are set correctly.</li>
+  </ul>
+
+  <h3>Firebase deployment fails</h3>
+  <pre>firebase use
+firebase projects:list
+firebase deploy --only hosting,firestore --debug</pre>
+  <p>Confirm you are logged in as an account with access to <code>seet-variances</code> and that <code>firebase.json</code> is present in the project root.</p>
+
+  <!-- ══════════ SECTION 12 ══════════ -->
+  <h2><span class="sec-num">12</span> Security Notes</h2>
+  <ul style="padding-left:18px;">
+    <li>Do not share your dashboard password with anyone.</li>
+    <li>The Firebase configuration visible in <code>index.html</code> is the public client config — it is intentionally visible but Firestore rules must remain restrictive.</li>
+    <li>Firestore security rules are deployed via <code>firestore.rules</code>. Review them before any broader rollout.</li>
+    <li>Never commit <code>.env</code> files or service-account JSON files to the repository.</li>
+    <li>If credentials are accidentally exposed, rotate them immediately in Firebase Console.</li>
+  </ul>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <div class="doc-footer">
+    <span>ODC SEET Variance Dashboard (myMVP) — Internal Use Only</span>
+    <span>v1.5.1 · Developer: Wilson Serquina</span>
+  </div>
+
+</div>
+
+<script>
+  // Auto-set print title
+  document.title = "ODC SEET Variance Dashboard - User Guide v1.5.1";
+</script>
+</body>
+</html>
